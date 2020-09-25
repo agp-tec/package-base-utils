@@ -1,0 +1,4 @@
+/.idea/.gitignore
+/.idea/php.xml
+/vendor/
+/composer.lock

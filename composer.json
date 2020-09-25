@@ -1,6 +1,6 @@
 {
-    "name": "agp/modelo",
-    "description": "Pacote modelo de Package",
+    "name": "agp/base-utils",
+    "description": "Package com classes base para utilizar em todos os projetos.",
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -10,18 +10,20 @@
         }
     ],
     "require": {
-        "php": ">=7.3"
+        "php": ">=7.3",
+        "agp/log": "^1.0"
     },
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-0": {
-            "Agp\\Modelo": "src/"
+            "Agp\\BaseUtils": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Agp\\Modelo\\AgpModeloServiceProvider"
+                "Agp\\BaseUtils\\AgpBaseUtilsServiceProvider"
             ]
         }
     }
