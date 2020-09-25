@@ -1,6 +1,6 @@
 <?php
 
-namespace Agp\Modelo\Traits;
+namespace Agp\BaseUtils\Traits;
 
 /**
  * Trait ValidUserRegistry

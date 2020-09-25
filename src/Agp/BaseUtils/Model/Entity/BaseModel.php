@@ -1,8 +1,8 @@
 <?php
 
-namespace Agp\Modelo\Model\Entity;
+namespace Agp\BaseUtils\Model\Entity;
 
-use Agp\Modelo\Traits\SyncRelations;
+use Agp\BaseUtils\Traits\SyncRelations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 

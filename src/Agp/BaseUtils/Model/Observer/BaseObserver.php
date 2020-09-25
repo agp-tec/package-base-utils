@@ -1,10 +1,11 @@
 <?php
 
 
-namespace Agp\Modelo\Model\Observer;
+namespace Agp\BaseUtils\Model\Observer;
 
 
-use Agp\Modelo\Events\LogAgpEvent;
+use Agp\Log\Jobs\LogJob;
+use Agp\Log\Log;
 
 class BaseObserver
 {
@@ -23,16 +24,16 @@ class BaseObserver
 
     public function created($obj)
     {
-        event(new LogAgpEvent(1, $this->nome . ' ' . $obj->{$this->campo} . ' cadastrad' . $this->genero, $obj->getTable()));
+        LogJob::dispatch(new Log(1, $this->nome . ' ' . $obj->{$this->campo} . ' cadastrad' . $this->genero, $obj->getTable()));
     }
 
     public function updated($obj)
     {
-        event(new LogAgpEvent(2, $this->nome . ' ' . $obj->{$this->campo} . ' atualizad' . $this->genero, $obj->getTable()));
+        LogJob::dispatch(new Log(2, $this->nome . ' ' . $obj->{$this->campo} . ' atualizad' . $this->genero, $obj->getTable()));
     }
 
     public function deleting($obj)
     {
-        event(new LogAgpEvent(3, $this->nome . ' ' . $obj->{$this->campo} . ' removid' . $this->genero, $obj->getTable()));
+        LogJob::dispatch(new Log(3, $this->nome . ' ' . $obj->{$this->campo} . ' removid' . $this->genero, $obj->getTable()));
     }
 }

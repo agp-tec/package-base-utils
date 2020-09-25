@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Agp\Modelo\Traits;
+namespace Agp\BaseUtils\Traits;
 
 
 use Agp\Modelo\Model\Entity\Pivot;
