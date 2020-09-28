@@ -82,6 +82,15 @@ class Utils
         return request()->ip();
     }
 
+    /** Retorna o user agent como paremtro de api ou da requisição
+     * @return mixed
+     */
+    public static function getUserAgent()
+    {
+        if (request()->get('client')) return request()->get('client')['user_agent']; //Se possuir client, é chamada de API
+        return request()->userAgent();
+    }
+
     /** Retorna o dígito do módulo 10
      * @param string $dado
      * @return int
