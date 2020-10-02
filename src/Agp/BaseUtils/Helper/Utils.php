@@ -2,6 +2,7 @@
 
 namespace Agp\BaseUtils\Helper;
 
+use DateTime;
 use Illuminate\Support\Str;
 
 /**
@@ -21,8 +22,8 @@ class Utils
      */
     public static function getTimeElapsed($date, $full)
     {
-        $now = new \DateTime();
-        $ago = new \DateTime($date);
+        $now = new DateTime();
+        $ago = new DateTime($date);
         $diff = $now->diff($ago);
 
         if ($diff->days > 7)
@@ -114,5 +115,45 @@ class Utils
             $soma = 10 - $soma;
         }
         return $soma;
+    }
+
+    /** Retorna a diferença de $str_interval entre duas datas
+     * @param string $str_interval Indica o formato de resposta y=anos, m=meses, d=dias, h=horas, i=minutos, s=segundos
+     * @param string|DateTime $dt_menor Data menor
+     * @param string|DateTime $dt_maior Data maior
+     * @param bool $relative Indica se resultado mostra negativo
+     * @return int
+     */
+    public static function date_diff($str_interval, $dt_menor, $dt_maior, $relative = false)
+    {
+
+        if (is_string($dt_menor)) $dt_menor = date_create($dt_menor);
+        if (is_string($dt_maior)) $dt_maior = date_create($dt_maior);
+
+        $diff = date_diff($dt_menor, $dt_maior, !$relative);
+        $total = 0;
+        switch ($str_interval) {
+            case "y":
+                $total = $diff->y + $diff->m / 12 + $diff->d / 365.25;
+                break;
+            case "m":
+                $total = $diff->y * 12 + $diff->m + $diff->d / 30 + $diff->h / 24;
+                break;
+            case "d":
+                $total = $diff->y * 365.25 + $diff->m * 30 + $diff->d + $diff->h / 24 + $diff->i / 60;
+                break;
+            case "h":
+                $total = ($diff->y * 365.25 + $diff->m * 30 + $diff->d) * 24 + $diff->h + $diff->i / 60;
+                break;
+            case "i":
+                $total = (($diff->y * 365.25 + $diff->m * 30 + $diff->d) * 24 + $diff->h) * 60 + $diff->i + $diff->s / 60;
+                break;
+            case "s":
+                $total = ((($diff->y * 365.25 + $diff->m * 30 + $diff->d) * 24 + $diff->h) * 60 + $diff->i) * 60 + $diff->s;
+                break;
+        }
+        if ($diff->invert)
+            return -1 * $total;
+        return $total;
     }
 }
