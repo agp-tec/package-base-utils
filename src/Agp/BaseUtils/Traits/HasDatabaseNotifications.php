@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace Agp\BaseUtils\Traits;
 
 use Agp\BaseUtils\Model\Entity\DatabaseNotification;
 
