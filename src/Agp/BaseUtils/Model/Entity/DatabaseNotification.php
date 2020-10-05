@@ -11,8 +11,8 @@ class DatabaseNotification extends \Illuminate\Notifications\DatabaseNotificatio
 
     public function __construct(array $attributes = [])
     {
-        $this->setConnection(config('config.notification_connection'))
-            ->setTable(config('config.notification_table'));
+        $this->setConnection(config('baseutils.notification_connection'))
+            ->setTable(config('baseutils.notification_table'));
 
         parent::__construct($attributes);
     }
