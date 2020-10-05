@@ -11,7 +11,6 @@ Contém
 - Models: Contém as classes BaseEntity, BaseRepository, BaseObserver, BaseService.
 - BaseObserver: Contém o registro de logs de adição, alteração e remoção da entidade e gerencia o disparo de webhook.
 - Traits: Contém as Trais utilizadas nos projetos
-- Notifications: Contém as Traits e classes necessárias para a criação de notificações.
 
 ### Git do projeto
 [Modelo Laravel](https://git.agapesolucoes.com.br/AGP/package-base-utils)
@@ -22,10 +21,6 @@ Contém
 ### Instalação
 
 Verifique as dependencias desse pacote.
-
-Variáveis de ambiente:
-- ``NOTIFICATION_TABLE``: Tabela que contém as notificações (log_notifications).
-- ``NOTIFICATION_CONNECTION``: Nome da conexão para a tabela de notificação.
 
 
 Execute no projeto que deseja instalar o pacote:
