@@ -156,4 +156,22 @@ class Utils
             return -1 * $total;
         return $total;
     }
+
+    /**
+     * Format a number with grouped thousands
+     * @link https://php.net/manual/en/function.number-format.php
+     * @param float $number <p>
+     * The number being formatted.
+     * </p>
+     * @param int $decimals [optional] <p>
+     * Sets the number of decimal points.
+     * </p>
+     * @param string $dec_point [optional]
+     * @param string $thousands_sep [optional]
+     * @return string A formatted version of number.
+     */
+    public static function number_format($number, $decimals = 2, $dec_point = ',', $thousands_sep = '.')
+    {
+        return number_format($number, $decimals, $dec_point, $thousands_sep);
+    }
 }
