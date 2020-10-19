@@ -26,15 +26,15 @@ class Utils
         $ago = new DateTime($date);
         $diff = $now->diff($ago);
 
-        if ($diff->days > 7)
-            return 'há ' . $diff->days . ' dias, ' . $ago->format('H:m d/m');
+//        if ($diff->days > 7)
+//            return 'há ' . $diff->days . ' dias';
 
         $diff->w = floor($diff->d / 7);
         $diff->d -= $diff->w * 7;
 
         $string = array(
             'y' => 'ano',
-            'm' => 'mês',
+            'm' => 'mes',
             'w' => 'sem',
             'd' => 'dia',
             'h' => 'hora',
@@ -43,7 +43,9 @@ class Utils
         );
         foreach ($string as $k => &$v) {
             if ($diff->$k) {
-                $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+                $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ?
+                        (($k == 'm')?'es':'s')
+                        : '');
             } else {
                 unset($string[$k]);
             }
