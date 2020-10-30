@@ -2,3 +2,8 @@
 /.idea/php.xml
 /vendor/
 /composer.lock
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/modules.xml
+/.idea/package-base-utils.iml
+/.idea/vcs.xml
+/.idea/workspace.xml

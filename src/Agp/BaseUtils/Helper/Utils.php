@@ -176,4 +176,22 @@ class Utils
     {
         return number_format($number, $decimals, $dec_point, $thousands_sep);
     }
+
+    /** Convert string to float value
+     * echo floatvalue('1.325.125,54'); // The output is 1325125.54
+     * echo floatvalue('1,325,125.54'); // The output is 1325125.54
+     * echo floatvalue('59,95');        // The output is 59.95
+     * echo floatvalue('12.000,30');    // The output is 12000.30
+     * echo floatvalue('12,000.30');    // The output is 12000.30
+     * @link https://stackoverflow.com/questions/4325363/converting-a-number-with-comma-as-decimal-point-to-float
+     * @param string $number <p>
+     * The string value
+     * </p>
+     * @return float
+     */
+    function floatvalue($val){
+        $val = str_replace(",",".",$val);
+        $val = preg_replace('/\.(?=.*\.)/', '', $val);
+        return floatval($val);
+    }
 }
