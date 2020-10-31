@@ -189,7 +189,7 @@ class Utils
      * </p>
      * @return float
      */
-    function floatvalue($val){
+    public static function floatvalue($val){
         $values = [
             '.','1','2','3','4','5','6','7','8','9','0'
         ];
