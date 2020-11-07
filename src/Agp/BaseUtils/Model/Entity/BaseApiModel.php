@@ -27,7 +27,7 @@ class BaseApiModel extends BaseModel
             throw new \Exception('Variável endpoint não inicializada');
         if ($this->authorization == null && $this->client_token == null)
             throw new \Exception('Variável token não inicializada');
-        if ($this->resourceClass == null)
+        if ($this->resourceClosure == null)
             throw new \Exception('Variável resource não inicializada');
     }
 
@@ -46,11 +46,12 @@ class BaseApiModel extends BaseModel
         ];
         if ($this->authorization)
             $headers['Authorization'] = $this->authorization;
-        if ($this->client_token)
-            $headers['client-token'] = $this->client_token;
+        else
+            if ($this->client_token)
+                $headers['client-token'] = $this->client_token;
 
-        $resourceClass = $this->resourceClass;
-        $body = $resourceClass($this);
+        $resource = $this->resourceClosure;
+        $body = $resource($this);
         if ($this->exists)
             $response = Http::withHeaders($headers)->put($this->endpoint . '/' . $this->getKey(), $body);
         else
