@@ -55,7 +55,9 @@ class BaseApiModel extends BaseModel
             $response = Http::withHeaders($headers)->put($this->endpoint . '/' . $this->getKey(), $body);
         else
             $response = Http::withHeaders($headers)->post($this->endpoint, $body);
-        return (($response->status() >= 200) && ($response->status() <= 299));
+        $saved = (($response->status() >= 200) && ($response->status() <= 299));
+        if ($saved)
+            $this->fill($response->json());
     }
 
     public function delete()
