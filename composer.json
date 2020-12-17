@@ -12,7 +12,8 @@
     "require": {
         "php": ">=7.3",
         "agp/log": "^1.0",
-        "agp/webhook": "^1.0"
+        "agp/webhook": "^1.0",
+        "tremby/laravel-git-version": "^1.2"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

@@ -4,6 +4,7 @@ namespace Agp\BaseUtils\Helper;
 
 use DateTime;
 use Illuminate\Support\Str;
+use Tremby\LaravelGitVersion\GitVersionHelper;
 
 /**
  * Class Utils
@@ -208,5 +209,18 @@ class Utils
         }
         $val = preg_replace('/\.(?=.*\.)/', '', $val);
         return floatval($val);
+    }
+
+    /** Retorna a versão atual do commit do git do projeto.
+     * @return string
+     */
+    public static function getVersion()
+    {
+        try {
+            $v = GitVersionHelper::getVersion();
+            return str_replace('-dirty','',$v);
+        } catch (\Throwable $exception) {
+            return '';
+        }
     }
 }
