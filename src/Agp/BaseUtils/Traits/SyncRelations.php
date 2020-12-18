@@ -111,8 +111,11 @@ trait SyncRelations
                 $relatedKey = null;
                 if (is_numeric($data)) {
                     $relatedKey = $data;
-                } else if (is_array($data) && Arr::exists($data, $related->getKeyName())) {
+                } elseif (is_array($data) && Arr::exists($data, $related->getKeyName())) {
                     $relatedKey = $data[$related->getKeyName()];
+                } elseif ($data instanceof Model) {
+                    $relation->associate($data);
+                    break;
                 } else {
                     $relation->dissociate();
                 }
