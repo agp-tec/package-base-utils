@@ -223,4 +223,20 @@ class Utils
             return '';
         }
     }
+
+    /**
+     * Adiciona mascara $mask em $str
+     *
+     * @param string $mask Mascara no formado ###
+     * @param string $str String sem mascara
+     * @return string
+     */
+    public static function mask($mask,$str)
+    {
+        $str = str_replace(" ","",$str);
+        for($i=0;$i<strlen($str);$i++)
+            $mask[strpos($mask,"#")] = $str[$i];
+        return $mask;
+
+    }
 }
