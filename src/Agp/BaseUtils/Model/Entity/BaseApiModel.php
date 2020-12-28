@@ -7,6 +7,7 @@ use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Validation\ValidationException;
 
 class BaseApiModel extends BaseModel
 {
@@ -57,8 +58,14 @@ class BaseApiModel extends BaseModel
         else
             $response = Http::withHeaders($headers)->post($this->endpoint, $body);
         $saved = (($response->status() >= 200) && ($response->status() <= 299));
-        if ($saved)
+        if ($saved) {
             $this->fill($response->json());
+        } else {
+            $res = $response->json();
+            if (($response->status() == 422) && array_key_exists('errors',$res))
+                throw ValidationException::withMessages($res['errors']);
+            throw new \Exception('Ops, erro '.$response->status().' ao salvar pessoa.');
+        }
     }
 
     public function delete()
