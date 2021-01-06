@@ -24,12 +24,17 @@ class BaseApiModel extends BaseModel
     {
         if ($this->app == null)
             throw new \Exception('Variável app não inicializada');
-        if ($this->endpoint == null)
+        if ($this->getEndPoint() == null)
             throw new \Exception('Variável endpoint não inicializada');
         if ($this->authorization == null && $this->client_token == null)
             throw new \Exception('Variável token não inicializada');
         if ($this->resourceClosure == null)
             throw new \Exception('Variável resource não inicializada');
+    }
+
+    protected function getEndPoint()
+    {
+        return $this->endpoint;
     }
 
     public function push()
@@ -54,9 +59,9 @@ class BaseApiModel extends BaseModel
         $resource = $this->resourceClosure;
         $body = $resource($this);
         if ($this->exists)
-            $response = Http::withHeaders($headers)->put($this->endpoint . '/' . $this->getKey(), $body);
+            $response = Http::withHeaders($headers)->put($this->getEndPoint() . '/' . $this->getKey(), $body);
         else
-            $response = Http::withHeaders($headers)->post($this->endpoint, $body);
+            $response = Http::withHeaders($headers)->post($this->getEndPoint(), $body);
         $saved = (($response->status() >= 200) && ($response->status() <= 299));
         if ($saved) {
             $this->fill($response->json());
@@ -82,7 +87,7 @@ class BaseApiModel extends BaseModel
             $headers['client-token'] = $this->client_token;
 
         if ($this->exists) {
-            $response = Http::withHeaders($headers)->delete($this->endpoint . '/' . $this->getKey());
+            $response = Http::withHeaders($headers)->delete($this->getEndPoint() . '/' . $this->getKey());
             return (($response->status() >= 200) && ($response->status() <= 299));
         }
         return false;
