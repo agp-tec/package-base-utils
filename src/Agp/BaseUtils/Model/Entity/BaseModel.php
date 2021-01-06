@@ -22,7 +22,7 @@ class BaseModel extends Model
         $res = [];
         $rules = $this->getRules();
         foreach ($rules as $key => $rule)
-            $res[$key] = 'O campo "' . Str::ucfirst(Str::camel($key)) . '" não é válido';
+            $res[$key.'.*'] = 'O campo "' . Str::ucfirst(Str::camel($key)) . '" não é válido';
 
         return $res;
     }
