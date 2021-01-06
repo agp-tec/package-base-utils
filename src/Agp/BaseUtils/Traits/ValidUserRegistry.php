@@ -10,6 +10,8 @@ trait ValidUserRegistry
 {
     public function validUserRegistry()
     {
-        return $this->adm_empresa_id == auth()->user()->getAdmEmpresaId();
+        if (auth()->check())
+            return $this->adm_empresa_id == auth()->user()->getAdmEmpresaId();
+        return true;
     }
 }
