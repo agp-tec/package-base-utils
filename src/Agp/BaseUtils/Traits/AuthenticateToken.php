@@ -32,7 +32,7 @@ trait AuthenticateToken
             $conta = $data[0];
             if (!$conta)
                 return redirect()->route("web.login.index");
-            $token = $conta->t;
+            $token = $conta->token;
         }
         try {
             try {
@@ -45,7 +45,7 @@ trait AuthenticateToken
                 (new UsuarioService())->salvaDadosUrl($request);
 
                 if ($conta)
-                    return redirect()->to(URL::signedRoute("web.login.pass", ['user' => $conta->mail ?? null]))->with('error', 'Sessão expirada. Acesse novamente.');
+                    return redirect()->to(URL::signedRoute("web.login.pass", ['user' => $conta->email ?? null]))->with('error', 'Sessão expirada. Acesse novamente.');
                 return redirect()->route("web.login.index")->with('error', 'Sessão expirada. Acesse novamente.');
             }
             if ($conta && (config('app.env') == 'production')) {
@@ -53,7 +53,7 @@ trait AuthenticateToken
                 JWTAuth::setToken($token);
                 $data = [];
                 $data[0] = $conta;
-                $data[0]->t = $token;
+                $data[0]->token = $token;
                 unset($data[0]->conectado);
                 request()->session()->put(config('login.session_data'), json_encode($data));
             }

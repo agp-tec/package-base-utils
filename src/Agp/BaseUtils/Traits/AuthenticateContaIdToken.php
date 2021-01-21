@@ -45,7 +45,7 @@ trait AuthenticateContaIdToken
             return redirect()->route("web.login.index");
 
         try {
-            $token = $data[$contaId]->t;
+            $token = $data[$contaId]->token;
             try {
                 //Realiza a renovação do token
                 JWTAuth::setToken($token);
@@ -60,7 +60,7 @@ trait AuthenticateContaIdToken
             if (config('app.env') == 'production') {
                 $token = JWTAuth::refresh();
                 JWTAuth::setToken($token);
-                $data[$contaId]->t = $token;
+                $data[$contaId]->token = $token;
                 request()->session()->put(config('login.session_data'), json_encode($data));
             }
         } catch (\Exception $e) {
