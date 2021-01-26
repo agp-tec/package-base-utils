@@ -45,7 +45,7 @@ trait AuthenticateToken
                 (new UsuarioService())->salvaDadosUrl($request);
 
                 if ($conta)
-                    return redirect()->to(URL::signedRoute("web.login.pass", ['user' => $conta->email ?? null]))->with('error', 'Sessão expirada. Acesse novamente.');
+                    return redirect()->to(URL::signedRoute("web.login.pass", ['user' => $conta->contaId ?? null]))->with('error', 'Sessão expirada. Acesse novamente.');
                 return redirect()->route("web.login.index")->with('error', 'Sessão expirada. Acesse novamente.');
             }
             if ($conta && (config('app.env') == 'production')) {
