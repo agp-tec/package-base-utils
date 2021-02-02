@@ -55,7 +55,9 @@ trait AuthenticateContaIdToken
                 //Salva infos da pagina acessada. Encaminha usuario apos login
                 (new UsuarioService())->salvaDadosUrl($request, $contaId);
 
-                return redirect()->route("login")->with('error', 'Sessão expirada. Acesse novamente.');
+                if ($data[$contaId]->id ?? false)
+                    return redirect()->to(URL::signedRoute("web.login.pass", ['user' => $data[$contaId]->id]))->with('error', 'Sessão expirada. Acesse novamente.');
+                return redirect()->route("web.login.index")->with('error', 'Sessão expirada. Acesse novamente.');
             }
             if (config('app.env') == 'production') {
                 $token = JWTAuth::refresh();
