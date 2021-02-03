@@ -80,6 +80,7 @@ class Utils
      */
     public static function getIpRequest()
     {
+        if (request()->get('client') && array_key_exists('ip', request()->get('client'))) return request()->get('client')['ip']; //Se possuir client, é chamada de API
         if (!empty($_SERVER['HTTP_X_REAL_IP'])) return $_SERVER['HTTP_X_REAL_IP'];
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) return $_SERVER['HTTP_CLIENT_IP'];
         if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) return $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -91,8 +92,25 @@ class Utils
      */
     public static function getUserAgent()
     {
-        if (request()->get('client')) return request()->get('client')['user_agent']; //Se possuir client, é chamada de API
+        if (request()->get('client') && array_key_exists('ip', request()->get('user_agent'))) return request()->get('client')['user_agent']; //Se possuir client, é chamada de API
         return request()->userAgent();
+    }
+
+    /** Adiciona dados do client no corpo de uma requisição
+     * @param array $body Dados do body
+     * @return mixed|array
+     */
+    public static function addClientDataRequest($body)
+    {
+        if (!$body)
+            $body = array();
+        if (!is_array($body))
+            return $body;
+        $body['client'] = [
+            'ip' => Utils::getIpRequest(),
+            'user_agent' => Utils::getUserAgent(),
+        ];
+        return $body;
     }
 
     /** Retorna o dígito do módulo 10

@@ -2,11 +2,11 @@
 
 namespace Agp\BaseUtils\Model\Entity;
 
-use Agp\BaseUtils\Traits\SyncRelations;
+use Agp\BaseUtils\Helper\Utils;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class BaseApiModel extends BaseModel
@@ -58,6 +58,8 @@ class BaseApiModel extends BaseModel
 
         $resource = $this->resourceClosure;
         $body = $resource($this);
+        if (!isset($this->noSendClient))
+            Utils::addClientDataRequest($body);
         if ($this->exists)
             $response = Http::withHeaders($headers)->put($this->getEndPoint() . '/' . $this->getKey(), $body);
         else
@@ -67,7 +69,7 @@ class BaseApiModel extends BaseModel
             $this->fill($response->json());
         } else {
             $res = $response->json();
-            if (($response->status() == 422) && array_key_exists('errors',$res))
+            if (($response->status() == 422) && array_key_exists('errors', $res))
                 throw ValidationException::withMessages($res['errors']);
             throw new \Exception('Ops, erro '.$response->status().' ao salvar pessoa.');
         }
