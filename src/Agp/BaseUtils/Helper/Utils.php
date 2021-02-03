@@ -80,7 +80,9 @@ class Utils
      */
     public static function getIpRequest()
     {
-        if (request()->get('client') && array_key_exists('ip', request()->get('client'))) return request()->get('client')['ip']; //Se possuir client, é chamada de API
+        $client = request()->get('client');
+        if ($client && (($client->ip ?? false) || (is_array($client) && array_key_exists('ip', $client))))
+            return $client->ip ?? $client['ip'];
         if (!empty($_SERVER['HTTP_X_REAL_IP'])) return $_SERVER['HTTP_X_REAL_IP'];
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) return $_SERVER['HTTP_CLIENT_IP'];
         if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) return $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -92,7 +94,9 @@ class Utils
      */
     public static function getUserAgent()
     {
-        if (request()->get('client') && array_key_exists('ip', request()->get('user_agent'))) return request()->get('client')['user_agent']; //Se possuir client, é chamada de API
+        $client = request()->get('client');
+        if ($client && (($client->user_agent ?? false) || (is_array($client) && array_key_exists('user_agent', $client))))
+            return $client->user_agent ?? $client['user_agent'];
         return request()->userAgent();
     }
 
