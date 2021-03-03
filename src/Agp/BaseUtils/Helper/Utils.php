@@ -2,6 +2,7 @@
 
 namespace Agp\BaseUtils\Helper;
 
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Support\Str;
 use Tremby\LaravelGitVersion\GitVersionHelper;
@@ -256,12 +257,68 @@ class Utils
     public static function mask($mask,$str)
     {
         $str = str_replace(" ","",$str);
+        $inc = 0;
         for($i=0;$i<strlen($str);$i++) {
             if (strpos($mask, "#") === false)
                 break;
+            if (($mask[$inc] != '#') && ($mask[$inc] == $str[$i]))
+                continue;
+            $inc = strpos($mask, "#") +1;
+
             $mask[strpos($mask, "#")] = $str[$i];
         }
         return $mask;
+    }
 
+    /**
+     * Converte uma data ou mês do inglês para português.
+     *
+     * @param string|DateTime|Carbon|int| $data  <p>
+     *  string: January até December, Jan a Dec ou "Y-m-d"
+     *  DateTime: Object DateTime
+     *  Carbon: Object Carbon
+     *  int: 1 a 12
+     * </p>
+     * @param string $tipo "extenso" ou "abreviado"
+     * @return string
+     */
+    public static function getMesTexto($data, $tipo = "extenso")
+    {
+        $month = [
+            "Jan" => 1, "Fev" => 2, "Mar" => 3, "Apr" => 4, "Mai" => 5, "Jun" => 6, "Jul" => 7, "Ago"  => 8, "Sep" => 9, "Oct" => 10, "Nov" => 11, "Dec" => 12
+        ];
+        $meses = [
+            1 => ['abreviado' => 'Jan', 'extenso' => 'Janeiro'],
+            2 => ['abreviado' => 'Fev', 'extenso' => 'Fevereiro'],
+            3 => ['abreviado' => 'Mar', 'extenso' => 'Março'],
+            4 => ['abreviado' => 'Abr', 'extenso' => 'Abril'],
+            5 => ['abreviado' => 'Mai', 'extenso' => 'Maio'],
+            6 => ['abreviado' => 'Jun', 'extenso' => 'Junho'],
+            7 => ['abreviado' => 'Jul', 'extenso' => 'Julho'],
+            8 => ['abreviado' => 'Ago', 'extenso' => 'Agosto'],
+            9 => ['abreviado' => 'Set', 'extenso' => 'Setembro'],
+            10 => ['abreviado' => 'Out', 'extenso' => 'Outubro'],
+            11 => ['abreviado' => 'Nov', 'extenso' => 'Novembro'],
+            12 => ['abreviado' => 'Dez', 'extenso' => 'Dezembro']
+        ];
+
+        try{
+            if (is_numeric($data))
+                return $meses[intval($data)][$tipo];
+
+            if ($data instanceof DateTime || $data instanceof Carbon)
+                return $meses[$data->format('m')][$tipo];
+
+            if(date_create_from_format($data, 'Y-m-d'))
+                return $meses[date_create($data)->format('m')][$tipo];
+
+            if (is_string($data))
+                return $meses[($month[strtolower(substr($data, 0, 3))])][$tipo];
+        }catch (\Exception $e){
+            return '';
+        }
+
+
+        return '';
     }
 }
