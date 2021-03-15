@@ -32,17 +32,10 @@ abstract class BaseService
 
     private function save($model)
     {
-        DB::beginTransaction();
         $this->beforeSave($model);
-        try {
-            $model->synchronized ? $model->push() : $model->save();
-            DB::commit();
-            $this->afterSave($model);
-            return $model;
-        } catch (\Exception $e) {
-            DB::rollback();
-            throw $e;
-        }
+        $model->synchronized ? $model->push() : $model->save();
+        $this->afterSave($model);
+        return $model;
     }
 
     public function beforeSave($model)
