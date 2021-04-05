@@ -215,10 +215,15 @@ class Utils
      */
     public static function floatvalue($val){
         $values = [
-            '.','1','2','3','4','5','6','7','8','9','0'
+            '.', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'
         ];
-        $val = str_replace(",",".",$val);
-
+        $isNegative = false;
+        $val = str_replace(" ", "", $val);
+        $val = str_replace(",", ".", $val);
+        if ($val[0] == '-') {
+            $isNegative = true;
+            $val = str_replace("-", "", $val);
+        }
         //Verifica se caracteres sao apenas numeros
         for ($i = 0; $i < Str::length($val); $i++) {
             $aux = false;
@@ -231,7 +236,7 @@ class Utils
                 return false;
         }
         $val = preg_replace('/\.(?=.*\.)/', '', $val);
-        return floatval($val);
+        return $isNegative ? floatval($val) * -1 : floatval($val);
     }
 
     /** Retorna a versão atual do commit do git do projeto.
