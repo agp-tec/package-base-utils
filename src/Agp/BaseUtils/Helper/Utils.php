@@ -319,11 +319,40 @@ class Utils
 
             if (is_string($data))
                 return $meses[($month[strtolower(substr($data, 0, 3))])][$tipo];
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return '';
         }
 
 
         return '';
+    }
+
+    /**
+     * Valida um campo JSON salvo como string no banco de dados. Utilizado em Model->setNNNNAttribute($value)
+     *
+     * @param string|object|array $value Dados em array, json format ou objeto
+     * @return string
+     */
+    public static function setJsonAttribute($value)
+    {
+        if ($value == null)
+            $value = '';
+
+        if (is_string($value)) {
+            $value = json_decode($value, true);
+            if (!$value)
+                throw ValidationException::withMessages(['message' => 'O formato dos parâmetros não é um JSON válido.']);
+        } elseif (!(is_array($value) || is_object($value))) {
+            throw ValidationException::withMessages(['message' => 'O formato dos parâmetros não é um JSON válido.']);
+        }
+        $value = array_map('htmlentities', $value);
+        $value = html_entity_decode(json_encode($value, JSON_PRETTY_PRINT));
+        if ($value === false)
+            throw ValidationException::withMessages(['message' => 'O formato dos parâmetros não é um JSON válido.']);
+
+        $value = str_replace(['\r\n', '\\'], [chr(13), ''], $value);
+        if ($value[0] == "\"") $value = substr($value, 1);
+        if ($value[Str::length($value) - 1] == "\"") $value = substr($value, 0, Str::length($value) - 1);
+        return $value;
     }
 }
