@@ -5,6 +5,7 @@ namespace Agp\BaseUtils\Helper;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Tremby\LaravelGitVersion\GitVersionHelper;
 
 /**
@@ -328,6 +329,29 @@ class Utils
     }
 
     /**
+     * Applies the callback to the elements of the given arrays
+     * @link https://php.net/manual/en/function.array-map.php
+     * @param callback $callback <p>
+     * Callback function to run for each element in each array.
+     * </p>
+     * @param array $arr <p>
+     * An array to run through the callback function.
+     * </p>
+     * @return array an array containing all the elements of arr1
+     * after applying the callback function to each one.
+     * @meta
+     */
+    public static function mult_array_map($callback, $arr)
+    {
+        if (!is_array($arr))
+            return $callback($arr);
+        foreach ($arr as $key => $item) {
+            $arr[$key] = self::mult_array_map($callback, $item);
+        }
+        return $arr;
+    }
+
+    /**
      * Valida um campo JSON salvo como string no banco de dados. Utilizado em Model->setNNNNAttribute($value)
      *
      * @param string|object|array $value Dados em array, json format ou objeto
@@ -345,7 +369,7 @@ class Utils
         } elseif (!(is_array($value) || is_object($value))) {
             throw ValidationException::withMessages(['message' => 'O formato dos parâmetros não é um JSON válido.']);
         }
-        $value = array_map('htmlentities', $value);
+        $value = self::mult_array_map('htmlentities', $value);
         $value = html_entity_decode(json_encode($value, JSON_PRETTY_PRINT));
         if ($value === false)
             throw ValidationException::withMessages(['message' => 'O formato dos parâmetros não é um JSON válido.']);
