@@ -52,9 +52,11 @@ trait AuthenticateContaIdToken
                 //Força expection de token expirado - Ao utilizar JWTAuth::refresh(), o sistema de autenticacao não valida a expiração do token automaticamente
                 JWTAuth::payload();
                 //Valida dispositivo
-                $dispositivo = \Agp\Login\Model\Service\UsuarioService::getDispositivoCookie();
+                $dispositivo = UsuarioService::getDispositivoCookie($data[$contaId]->id ?? null);
                 if (!$dispositivo || !array_key_exists('id', $dispositivo))
-                    return redirect()->to(URL::signedRoute("web.login.pass", ['user' => auth()->user()->getKey()]))->with('error', 'Falha ao validar dispositivo. Acesse novamente.');
+                    return redirect()->to(
+                        ($data[$contaId]->id ?? null) ? URL::signedRoute("web.login.pass", ['user' => $data[$contaId]->id]) : "web.login.index"
+                    )->with('error', 'Falha ao validar dispositivo. Acesse novamente.');
             } catch (\Exception $e) {
                 //Salva infos da pagina acessada. Encaminha usuario apos login
                 (new UsuarioService())->salvaDadosUrl($request, $contaId);

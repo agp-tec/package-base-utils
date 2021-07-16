@@ -41,15 +41,17 @@ trait AuthenticateToken
                 //Força expection de token expirado - Ao utilizar JWTAuth::refresh(), o sistema de autenticacao não valida a expiração do token automaticamente
                 JWTAuth::payload();
                 //Valida dispositivo
-                $dispositivo = \Agp\Login\Model\Service\UsuarioService::getDispositivoCookie();
+                $dispositivo = UsuarioService::getDispositivoCookie($conta->id ?? null);
                 if (!$dispositivo || !array_key_exists('id', $dispositivo))
-                    return redirect()->to(URL::signedRoute("web.login.pass", ['user' => auth()->user()->getKey()]))->with('error', 'Falha ao validar dispositivo. Acesse novamente.');
+                    return redirect()->to(
+                        ($conta->id ?? null) ? URL::signedRoute("web.login.pass", ['user' => $conta->id]) : "web.login.index"
+                    )->with('error', 'Falha ao validar dispositivo. Acesse novamente.');
             } catch (\Exception $e) {
                 //Salva infos da pagina acessada. Encaminha usuario apos login
                 (new UsuarioService())->salvaDadosUrl($request);
 
                 if ($conta)
-                    return redirect()->to(URL::signedRoute("web.login.pass", ['user' => $conta->contaId ?? null]))->with('error', 'Sessão expirada. Acesse novamente.');
+                    return redirect()->to(URL::signedRoute("web.login.pass", ['user' => $conta->id ?? null]))->with('error', 'Sessão expirada. Acesse novamente.');
                 return redirect()->route("web.login.index")->with('error', 'Sessão expirada. Acesse novamente.');
             }
             if ($conta && (config('app.env') == 'production')) {
