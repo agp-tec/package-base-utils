@@ -242,7 +242,7 @@ class ExampleNotify extends Notification
     {
         return [
             'notificacao' => $this->mensagem,
-            'dispositivos' => $this->user->dispositivos->whereNotNull('subscricao')
+            'dispositivos' => $this->user->dispositivos->whereNotNull('subscricao') // Array de UsuariosDispositivos;
         ];
     }
 }
