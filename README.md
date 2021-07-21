@@ -25,11 +25,11 @@ Verifique as dependencias desse pacote.
 Execute no projeto que deseja instalar o pacote:
 
 ```bash
-composer require agp/base-utils
+$ composer require agp/base-utils
 ```
 
 ```bash
-php artisan config:cache
+$ php artisan config:cache
 ```
 <br>
 <hr>
@@ -251,6 +251,9 @@ class ExampleNotify extends Notification
 
 
 > O pacote remove a subinscrição dos dispositivo que não retornar resposta de sucesso.
+
+Observações:
+
 
 E pronto, agora só depende de você. Crie notificações execelente! 😉
 

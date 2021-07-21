@@ -96,6 +96,6 @@ self.addEventListener('push', function(event) {
 self.addEventListener('notificationclick', function(event) {
     event.notification.close();
     event.waitUntil(
-        clients.openWindow('https://agpix.com.br/')
+        clients.openWindow('https://___NAME___.com.br/')
     );
 });
