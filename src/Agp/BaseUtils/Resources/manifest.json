@@ -1,0 +1,46 @@
+{
+  "name": "___NAME___",
+  "short_name": "___NAME___",
+  "icons": [
+    {
+      "src": "media/___NAME___/icons/icon-48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "media/___NAME___/icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "media/___NAME___/icons/icon-420.png",
+      "sizes": "420x420",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "src": "media/___NAME___/icons/icon-48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "src": "media/___NAME___/icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "src": "media/___NAME___/icons/icon-420.png",
+      "sizes": "420x420",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "description": "Um projeto AGP",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FFFFFF",
+  "display": "standalone",
+  "prefer_related_applications": true,
+  "android_package_name": "com.___NAME___.android"
+}
