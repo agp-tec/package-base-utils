@@ -31,7 +31,7 @@ function urlB64ToUint8Array(base64String) {
 
 if ('serviceWorker' in navigator && 'PushManager' in window) {
     window.addEventListener('load', function() {
-        navigator.serviceWorker.register('sw.js')
+        navigator.serviceWorker.register('/sw.js', {scope: '/'})
             .then(function(swReg) {
                 swRegistration = swReg;
                 initializeUI();
@@ -43,7 +43,7 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     $('.alert-push-no-suported').removeClass('d-none');
 
     window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/sw.js');
+        navigator.serviceWorker.register('/sw.js', {scope: '/'});
     });
 } else {
     pushButton.classList.add('d-none');
