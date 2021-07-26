@@ -15,6 +15,19 @@ use Tymon\JWTAuth\Facades\JWTAuth;
  */
 trait AuthenticateToken
 {
+    private function getUserId($payload)
+    {
+        if (!is_object($payload) || !method_exists($payload, 'getClaims'))
+            return null;
+        $claims = $payload->getClaims();
+        if (!is_object($claims) || !method_exists($claims, 'get'))
+            return null;
+        $sub = $claims->get('sub');
+        if (!is_object($sub) || !method_exists($sub, 'getValue'))
+            return null;
+        return $sub->getValue();
+    }
+
     public function handle(Request $request, Closure $next)
     {
         //Rotas abertas
@@ -39,19 +52,20 @@ trait AuthenticateToken
                 //Realiza a renovação do token
                 JWTAuth::setToken($token);
                 //Força expection de token expirado - Ao utilizar JWTAuth::refresh(), o sistema de autenticacao não valida a expiração do token automaticamente
-                JWTAuth::payload();
+                $payload = JWTAuth::payload();
+                $userId = $conta->id ?? $this->getUserId($payload);
                 //Valida dispositivo
-                $dispositivo = UsuarioService::getDispositivoCookie($conta->id ?? null);
+                $dispositivo = UsuarioService::getDispositivoCookie($userId);
                 if (!$dispositivo || !array_key_exists('id', $dispositivo))
                     return redirect()->to(
-                        ($conta->id ?? null) ? URL::signedRoute("web.login.pass", ['user' => $conta->id]) : "web.login.index"
+                        $userId ? URL::signedRoute("web.login.pass", ['user' => $userId]) : route("web.login.index")
                     )->with('error', 'Falha ao validar dispositivo. Acesse novamente.');
             } catch (\Exception $e) {
                 //Salva infos da pagina acessada. Encaminha usuario apos login
                 (new UsuarioService())->salvaDadosUrl($request);
 
-                if ($conta)
-                    return redirect()->to(URL::signedRoute("web.login.pass", ['user' => $conta->id ?? null]))->with('error', 'Sessão expirada. Acesse novamente.');
+                if ($conta->id ?? ($userId ?? null))
+                    return redirect()->to(URL::signedRoute("web.login.pass", ['user' => $conta->id ?? $userId]))->with('error', 'Sessão expirada. Acesse novamente.');
                 return redirect()->route("web.login.index")->with('error', 'Sessão expirada. Acesse novamente.');
             }
             if ($conta && (config('app.env') == 'production')) {
