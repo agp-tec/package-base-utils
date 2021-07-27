@@ -52,6 +52,13 @@ Primeiro você precisa verificar a existência, caso contrário criar:
     'api_client_token' => env('API_CLIENT_TOKEN', null),
     'id_app' => env('ID_APP', '1'),
     'api_agpadmin' => env('API_AGPADMIN'),
+    'device_cookie' => env('LOGIN_DEVICE_COOKIE', 'device'),
+    ```
+  
+- Necessário também esse parâmetro abaixo no login.php
+
+    ```json
+    'device_cookie' => env('LOGIN_DEVICE_COOKIE', 'device'),
     ```
 <br>
 
@@ -126,12 +133,13 @@ Ele gerencia as notificações por push e ajuda a criar o aplicativo web offline
 
 Primeiro você precisa verificar a existência, caso contrário criar:
 
-- Necessário esses três parâmetros abaixo no config.php
+- Necessário esses quatros parâmetros abaixo no config.php
 
     ```json
     'api_client_token' => env('API_CLIENT_TOKEN', null),
     'id_app' => env('ID_APP', '1'),
     'api_agpadmin' => env('API_AGPADMIN'),
+    'device_cookie' => env('LOGIN_DEVICE_COOKIE', 'device'),
     ```
 <br>
 
