@@ -360,19 +360,18 @@ class Utils
     public static function setJsonAttribute($value)
     {
         if ($value == null)
-            $value = '';
+            $value = array();
 
-        if (is_string($value)) {
+        if (is_string($value))
             $value = json_decode($value, true);
-            if (!$value)
-                throw ValidationException::withMessages(['message' => 'O formato dos parâmetros não é um JSON válido.']);
-        } elseif (!(is_array($value) || is_object($value))) {
-            throw ValidationException::withMessages(['message' => 'O formato dos parâmetros não é um JSON válido.']);
-        }
+
+        if (!(is_array($value) || is_object($value)))
+            throw ValidationException::withMessages(['message' => 'O formato dos parâmetros não é um JSON válido. ERR1']);
+
         $value = self::mult_array_map('htmlentities', $value);
         $value = html_entity_decode(json_encode($value, JSON_PRETTY_PRINT));
         if ($value === false)
-            throw ValidationException::withMessages(['message' => 'O formato dos parâmetros não é um JSON válido.']);
+            throw ValidationException::withMessages(['message' => 'O formato dos parâmetros não é um JSON válido. ERR2']);
 
         $value = str_replace(['\r\n', '\\'], [chr(13), ''], $value);
         if ($value[0] == "\"") $value = substr($value, 1);
