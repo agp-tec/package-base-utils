@@ -48,12 +48,16 @@ class GeoIP
     {
         if (strlen($this->ip < 9))
             exit;
-        $res = unserialize(file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $this->ip));
-        if (is_array($res)) {
-            $this->response = $res;
-            return $this->response['geoplugin_status'] == 200;
+        try {
+            $res = unserialize(file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $this->ip));
+            if (is_array($res)) {
+                $this->response = $res;
+                return $this->response['geoplugin_status'] == 200;
+            }
+            return false;
+        } catch (\Throwable $exception) {
+            return false;
         }
-        return false;
     }
 
     public function getCity()
