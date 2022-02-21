@@ -43,7 +43,7 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     $('.alert-push-no-suported').removeClass('d-none');
 
     window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/sw.js', {scope: '/'});
+        navigator.serviceWorker.register('/sw.js');
     });
 } else {
     pushButton.classList.add('d-none');
@@ -81,7 +81,6 @@ function updateBtn() {
         $('.alert-push-bloqueador').removeClass('d-none');
         pushButton.disabled = true;
         pushButton.classList.add('d-none');
-        updateSubscriptionOnServer(null);
         return;
     }
 
@@ -110,6 +109,11 @@ function subscribeUser() {
 
 function updateSubscriptionOnServer(subscription) {
     const subscriptionJson = document.querySelector('.js-subscription-json');
+
+    if (Notification.permission === 'denied') {
+        updateBtn();
+        return;
+    }
 
     if (subscription) {
         const json = JSON.stringify(subscription);
